@@ -26,7 +26,8 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
 // TODO: Use middleware for crypto login
 Route::group(['prefix' => 'notes', 'namespace' => 'Notes'], function () {
     Route::get('/{id}/', 'NotesController@getNote');
-    Route::post('/', 'NotesController@postNote');
     Route::put('/{id}/', 'NotesController@putNote');
     Route::delete('/{id}/', 'NotesController@deleteNote');
+    // Note: Temporary workaround as '/' causes a 405 here
+    Route::post('/new', 'NotesController@postNote');
 });
