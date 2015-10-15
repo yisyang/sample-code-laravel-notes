@@ -16,6 +16,9 @@ class UsersModel extends Model implements AuthenticatableContract,
 {
     use Authenticatable, Authorizable, CanResetPassword;
 
+    // TODO: implement sensible validation in models
+    // http://daylerees.com/trick-validation-within-models/
+
     /**
      * The database table used by the model.
      *

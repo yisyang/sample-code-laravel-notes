@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Notes;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\NotesModel;
+use Illuminate\Http\Request;
 
 /**
  * Notes controller that contains methods for the RESTful API
@@ -16,10 +16,11 @@ class NotesController extends Controller
     /**
      * Gets previously set note using note ID
      *
+     * @param Request $request
      * @param int $noteId
      * @return string
      */
-    public function getNote($noteId)
+    public function getNote(Request $request, $noteId)
     {
         // Try to get notes by ID
         $note = NotesModel::find($noteId);
@@ -101,9 +102,11 @@ class NotesController extends Controller
     /**
      * Deletes a note
      *
+     * @param Request $request
+     * @param int $noteId
      * @return string
      */
-    public function deleteNote($noteId)
+    public function deleteNote(Request $request, $noteId)
     {
         // Try to get notes by ID
         $note = NotesModel::find($noteId);

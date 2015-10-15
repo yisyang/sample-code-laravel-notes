@@ -15,9 +15,9 @@
 // TODO: Add versioning middleware and load different routes based on request header
 
 // Login
-// TODO: Implement login
-// TODO: Implement crypto auth
+// TODO: Implement realistic crypto auth (with JWT)
 Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
+    Route::post('/login', 'AuthController@postLoginHack');
 //    Route::post('/login', 'LoginController@postLogin');
 //    Route::get('/refresh-token', ['middleware' => 'jwt.refresh', 'uses' => 'LoginController@getRefreshToken']);
 });

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\UsersModel;
-use Validator;
 use App\Http\Controllers\Controller;
+use App\Models\UsersModel;
+use Auth;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
+use Validator;
 
 class AuthController extends Controller
 {
@@ -36,7 +38,7 @@ class AuthController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -51,7 +53,7 @@ class AuthController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return UsersModel
      */
     protected function create(array $data)
@@ -61,5 +63,39 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function postLoginHack(Request $request)
+    {
+        // TODO: extend exception handler to output JSON message on validation failure
+        try {
+            $this->validate($request, [
+                'email' => 'required|email',
+                'password' => 'required|min:8',
+            ]);
+        } catch (\Exception $e) {
+            // TODO: actually show the errors... in JSON (see note above)
+            return response()->json('Bad parameters.', 400);
+        }
+
+        try{
+            $success = Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')]);
+        }
+        catch(\Exception $e) {
+            return response()->json('Nope', 401);
+        }
+
+        // Just to be sure...
+        if(!$success){
+            return response()->json('Nope', 401);
+        }
+
+        $user = UsersModel::where([
+            'email' => $request->input('email')
+        ])->get();
+
+        // Hack: (non-crypto) put user info in token
+        $token = base64_encode(json_encode($user->toArray()));
+        return response()->json(['token' => $token]);
     }
 }
