@@ -11,6 +11,22 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// TODO: Extend default Laravel response and exception handlers to output default response to JSON
+// TODO: Add versioning middleware and load different routes based on request header
+
+// Login
+// TODO: Implement login
+// TODO: Implement crypto auth
+Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
+//    Route::post('/login', 'LoginController@postLogin');
+//    Route::get('/refresh-token', ['middleware' => 'jwt.refresh', 'uses' => 'LoginController@getRefreshToken']);
+});
+
+// Routes for the Notes API
+// TODO: Use middleware for crypto login
+Route::group(['prefix' => 'notes', 'namespace' => 'Notes'], function () {
+    Route::get('/{id}/', 'NotesController@getNote');
+    Route::post('/', 'NotesController@postNote');
+    Route::put('/{id}/', 'NotesController@putNote');
+    Route::delete('/{id}/', 'NotesController@deleteNote');
 });
